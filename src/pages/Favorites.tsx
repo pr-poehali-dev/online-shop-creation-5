@@ -1,17 +1,16 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import { Link } from 'react-router-dom';
+import { useFavorites } from '@/hooks/useFavorites';
+import { products } from '@/data/products';
 
 export default function Favorites() {
-  const favorites = [
-    { id: 1, title: 'Смартфон Galaxy S24 Ultra 256GB', price: 79990, originalPrice: 99990, rating: 4.8, reviews: 342, image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400', discount: 20, seller: 'TechStore' },
-    { id: 2, title: 'Беспроводные наушники AirPods Pro', price: 12990, originalPrice: 18990, rating: 4.6, reviews: 156, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400', discount: 32, seller: 'AudioShop' },
-    { id: 3, title: 'Умные часы Apple Watch Series 9', price: 24990, originalPrice: 34990, rating: 4.9, reviews: 521, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400', discount: 29, seller: 'Gadget Store' },
-  ];
+  const { favorites: favoriteIds } = useFavorites();
+  const favoriteProducts = products.filter(product => favoriteIds.includes(product.id));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -20,10 +19,10 @@ export default function Favorites() {
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Избранное</h1>
-          <p className="text-muted-foreground">{favorites.length} товаров</p>
+          <p className="text-muted-foreground">{favoriteProducts.length} товаров</p>
         </div>
 
-        {favorites.length === 0 ? (
+        {favoriteProducts.length === 0 ? (
           <Card className="p-12 text-center">
             <div className="max-w-md mx-auto space-y-4">
               <div className="w-24 h-24 mx-auto rounded-full bg-gradient-primary/10 flex items-center justify-center">
@@ -43,8 +42,8 @@ export default function Favorites() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {favorites.map((product) => (
-              <ProductCard key={product.id} {...product} />
+            {favoriteProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}

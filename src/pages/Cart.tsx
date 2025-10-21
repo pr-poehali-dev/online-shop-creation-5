@@ -1,48 +1,17 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCart } from '@/hooks/useCart';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      title: 'Смартфон Galaxy S24 Ultra 256GB',
-      price: 79990,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200',
-      seller: 'TechStore',
-    },
-    {
-      id: 2,
-      title: 'Беспроводные наушники AirPods Pro',
-      price: 12990,
-      quantity: 2,
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200',
-      seller: 'AudioShop',
-    },
-  ]);
+  const { items: cartItems, updateQuantity, removeFromCart, getTotalPrice } = useCart();
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = getTotalPrice();
   const delivery = 0;
   const total = subtotal + delivery;
 
@@ -79,22 +48,22 @@ export default function Cart() {
                   <div className="flex gap-4">
                     <img
                       src={item.image}
-                      alt={item.title}
+                      alt={item.name}
                       className="w-24 h-24 object-cover rounded-lg"
                     />
                     <div className="flex-1 space-y-2">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="font-semibold">{item.title}</h3>
+                          <h3 className="font-semibold">{item.name}</h3>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                            <Icon name="Store" size={14} />
-                            <span>{item.seller}</span>
+                            <Icon name="Tag" size={14} />
+                            <span>{item.category}</span>
                           </div>
                         </div>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item.id)}
                         >
                           <Icon name="Trash2" size={18} className="text-destructive" />
                         </Button>
@@ -105,7 +74,7 @@ export default function Cart() {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8"
-                            onClick={() => updateQuantity(item.id, -1)}
+                            onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
                           >
                             <Icon name="Minus" size={14} />
                           </Button>
@@ -116,17 +85,17 @@ export default function Cart() {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8"
-                            onClick={() => updateQuantity(item.id, 1)}
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Icon name="Plus" size={14} />
                           </Button>
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold">
-                            {(item.price * item.quantity).toLocaleString('ru-RU')} ₽
+                            {(Math.floor(item.price * (1 - item.discount / 100)) * item.quantity).toLocaleString('ru-RU')} ₽
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            {item.price.toLocaleString('ru-RU')} ₽ за шт.
+                            {Math.floor(item.price * (1 - item.discount / 100)).toLocaleString('ru-RU')} ₽ за шт.
                           </div>
                         </div>
                       </div>

@@ -115,4 +115,44 @@
   .hover-scale {
     @apply transition-transform duration-200 hover:scale-105;
   }
+
+  .bg-vibrant-red {
+    background-color: #ff6b6b;
+  }
+
+  .text-vibrant-red {
+    color: #ff6b6b;
+  }
+
+  .fill-vibrant-red {
+    fill: #ff6b6b;
+  }
+
+  .bg-turquoise {
+    background-color: #4eddcc;
+  }
+
+  .text-turquoise {
+    color: #4eddcc;
+  }
+
+  .bg-bright-yellow {
+    background-color: #ffe66d;
+  }
+
+  .text-bright-yellow {
+    color: #ffe66d;
+  }
+
+  .fill-bright-yellow {
+    fill: #ffe66d;
+  }
+
+  .bg-deep-purple {
+    background-color: #2d1b69;
+  }
+
+  .text-deep-purple {
+    color: #2d1b69;
+  }
 }

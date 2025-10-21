@@ -1,4 +1,6 @@
-import { Header } from "@/components/Header";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -283,12 +285,10 @@ const Product = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
-
-const Label = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <label className={className}>{children}</label>
-);
 
 export default Product;

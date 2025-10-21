@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,41 +8,11 @@ import Icon from '@/components/ui/icon';
 
 export default function Sellers() {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
-            <Link to="/" className="text-2xl font-bold bg-gradient-marketplace bg-clip-text text-transparent">
-              MARKETPLACE
-            </Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">Главная</Link>
-              <Link to="/catalog" className="text-sm font-medium hover:text-primary transition-colors">Каталог</Link>
-              <Link to="/sellers" className="text-sm font-medium text-primary">Продавцам</Link>
-              <Link to="/delivery" className="text-sm font-medium hover:text-primary transition-colors">Доставка</Link>
-            </nav>
-            <div className="flex items-center gap-4">
-              <Link to="/favorites">
-                <Button variant="ghost" size="icon">
-                  <Icon name="Heart" size={20} />
-                </Button>
-              </Link>
-              <Link to="/cart">
-                <Button variant="ghost" size="icon">
-                  <Icon name="ShoppingCart" size={20} />
-                </Button>
-              </Link>
-              <Link to="/profile">
-                <Button variant="ghost" size="icon">
-                  <Icon name="User" size={20} />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col">
+      <Header />
 
-      <section className="bg-gradient-multi py-20">
+      <main className="flex-1">
+        <section className="bg-gradient-multi py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold text-white mb-6">
             Начните продавать на MARKETPLACE
@@ -210,6 +181,9 @@ export default function Sellers() {
           </Card>
         </div>
       </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }
