@@ -1,95 +1,126 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import Icon from "@/components/ui/icon";
-import { useState } from "react";
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import Icon from '@/components/ui/icon';
+import { useState } from 'react';
 
 interface ProductCardProps {
   id: number;
   title: string;
   price: number;
   originalPrice?: number;
-  image: string;
   rating: number;
   reviews: number;
+  image: string;
   discount?: number;
-  seller: string;
+  seller?: string;
 }
 
-export const ProductCard = ({
+export default function ProductCard({
   title,
   price,
   originalPrice,
-  image,
   rating,
   reviews,
+  image,
   discount,
-  seller,
-}: ProductCardProps) => {
+  seller = 'MarketNova',
+}: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isInCart, setIsInCart] = useState(false);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsFavorite(!isFavorite);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsInCart(true);
+    setTimeout(() => setIsInCart(false), 2000);
+  };
 
   return (
-    <Card className="group relative overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
-      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-muted to-background">
-        <img
-          src={image}
+    <Card className="group overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
+      <div className="relative overflow-hidden aspect-[4/3]">
+        <img 
+          src={image} 
           alt={title}
-          className="h-full w-full object-cover transition-transform group-hover:scale-110"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
         {discount && (
-          <Badge className="absolute top-3 left-3 bg-gradient-secondary text-white border-0">
+          <Badge className="absolute top-3 right-3 bg-red-500 text-white border-0 text-sm font-bold">
             -{discount}%
           </Badge>
         )}
         <Button
           size="icon"
-          variant="ghost"
-          className="absolute top-3 right-3 bg-white/90 hover:bg-white"
-          onClick={() => setIsFavorite(!isFavorite)}
+          variant="secondary"
+          className={`absolute top-3 left-3 transition-all ${
+            isFavorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          }`}
+          onClick={handleToggleFavorite}
         >
-          <Icon
-            name={isFavorite ? "Heart" : "Heart"}
-            size={20}
-            className={isFavorite ? "fill-secondary text-secondary" : ""}
+          <Icon 
+            name="Heart" 
+            size={18} 
+            className={isFavorite ? 'fill-red-500 text-red-500' : ''}
           />
         </Button>
-      </div>
-      
-      <div className="p-4 space-y-2">
-        <h3 className="font-medium text-sm line-clamp-2 min-h-[40px]">{title}</h3>
-        
-        <div className="flex items-center gap-1 text-sm">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Icon
-                key={i}
-                name="Star"
-                size={14}
-                className={i < Math.floor(rating) ? "fill-accent text-accent" : "fill-muted text-muted"}
-              />
-            ))}
-          </div>
-          <span className="text-muted-foreground text-xs">({reviews})</span>
+        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="w-full bg-white hover:bg-white/90"
+          >
+            <Icon name="Eye" size={16} className="mr-2" />
+            Быстрый просмотр
+          </Button>
         </div>
-
-        <p className="text-xs text-muted-foreground">{seller}</p>
-
+      </div>
+      <div className="p-4 space-y-3">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Icon name="Store" size={14} />
+          <span>{seller}</span>
+        </div>
+        <h3 className="font-semibold line-clamp-2 min-h-[2.5rem] group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-1">
+            <Icon name="Star" size={16} className="text-yellow-500 fill-yellow-500" />
+            <span className="font-medium">{rating}</span>
+          </div>
+          <span className="text-muted-foreground">({reviews})</span>
+        </div>
         <div className="flex items-end gap-2">
-          <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <span className="text-2xl font-bold">
             {price.toLocaleString('ru-RU')} ₽
           </span>
           {originalPrice && (
-            <span className="text-sm text-muted-foreground line-through">
+            <span className="text-sm text-muted-foreground line-through mb-1">
               {originalPrice.toLocaleString('ru-RU')} ₽
             </span>
           )}
         </div>
-
-        <Button className="w-full bg-gradient-primary hover:opacity-90 text-white border-0">
-          <Icon name="ShoppingCart" size={18} className="mr-2" />
-          В корзину
+        <Button 
+          className="w-full bg-gradient-primary hover:opacity-90 text-white"
+          onClick={handleAddToCart}
+          disabled={isInCart}
+        >
+          {isInCart ? (
+            <>
+              <Icon name="Check" className="mr-2" size={18} />
+              Добавлено
+            </>
+          ) : (
+            <>
+              <Icon name="ShoppingCart" className="mr-2" size={18} />
+              В корзину
+            </>
+          )}
         </Button>
       </div>
     </Card>
   );
-};
+}
