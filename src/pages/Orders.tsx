@@ -1,4 +1,5 @@
-import { Header } from "@/components/Header";
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -67,10 +68,10 @@ const Orders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
-      <div className="container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Мои заказы</h1>
 
         <div className="space-y-6">
@@ -169,7 +170,9 @@ const Orders = () => {
             </Button>
           </Card>
         )}
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };
